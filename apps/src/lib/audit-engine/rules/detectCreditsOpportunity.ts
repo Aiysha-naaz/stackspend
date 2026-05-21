@@ -6,21 +6,21 @@ export function detectCreditsOpportunity(
 ): OptimizationInsight[] {
   const insights: OptimizationInsight[] = [];
 
-  const openAISpend =
-    state.tools.openai_api.enabled
-      ? state.tools.openai_api.monthlySpend
-      : 0;
+  const openAISpend = state.tools.openai_api.enabled
+    ? state.tools.openai_api.monthlySpend
+    : 0;
 
-  const anthropicSpend =
-    state.tools.anthropic_api.enabled
-      ? state.tools.anthropic_api.monthlySpend
-      : 0;
+  const anthropicSpend = state.tools.anthropic_api.enabled
+    ? state.tools.anthropic_api.monthlySpend
+    : 0;
 
-  const totalApiSpend =
-    openAISpend + anthropicSpend;
+  const totalApiSpend = openAISpend + anthropicSpend;
+
+  if (totalApiSpend <= 0) return insights;
 
   if (totalApiSpend >= 500) {
     insights.push({
+      id: 'api-credits-opportunity',
       toolId:
         openAISpend >= anthropicSpend
           ? 'openai_api'
@@ -32,9 +32,7 @@ export function detectCreditsOpportunity(
       message:
         'Your API usage volume may qualify for discounted infrastructure credits and committed-use savings.',
 
-      potentialSavings: Math.round(
-        totalApiSpend * 0.2
-      ),
+      potentialSavings: Math.round(totalApiSpend * 0.2),
     });
   }
 

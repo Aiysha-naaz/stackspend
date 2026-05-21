@@ -21,14 +21,15 @@ export function detectPlanMismatch(
       COST_MATRIX.chatgpt.Plus *
       state.tools.chatgpt.seats;
 
-    insights.push({
-      toolId: 'chatgpt',
-      type: 'tier_mismatch',
-      severity: 'warning',
-      message:
-        'ChatGPT Team may be unnecessary for very small teams without advanced workspace controls.',
-      potentialSavings: current - optimized,
-    });
+   insights.push({
+  id: 'chatgpt-plan-mismatch',
+  toolId: 'chatgpt',
+  type: 'tier_mismatch',
+  severity: 'warning',
+  message:
+    'ChatGPT Team may be unnecessary for very small teams without advanced workspace controls.',
+  potentialSavings: current - optimized,
+});
   }
 
   // Cursor Business -> Pro
@@ -45,14 +46,15 @@ export function detectPlanMismatch(
       COST_MATRIX.cursor.Pro *
       state.tools.cursor.seats;
 
-    insights.push({
-      toolId: 'cursor',
-      type: 'tier_mismatch',
-      severity: 'warning',
-      message:
-        'Cursor Business features may be underutilized for smaller engineering teams.',
-      potentialSavings: current - optimized,
-    });
+   insights.push({
+  id: 'cursor-plan-mismatch',
+  toolId: 'cursor',
+  type: 'tier_mismatch',
+  severity: 'warning',
+  message:
+    'Cursor Business features may be underutilized for smaller engineering teams.',
+  potentialSavings: current - optimized,
+});
   }
 
   return insights;
