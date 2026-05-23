@@ -51,3 +51,27 @@ Need to further refine plan mismatch detection and ensure all tools behave consi
 
 **Plan for tomorrow:**
 Improve detectPlanMismatch logic, reduce edge-case inconsistencies, and tighten overall audit accuracy for more realistic savings outputs.
+
+
+
+## Day 4 — 2026-05-23
+
+**Hours worked:** 6
+
+**What I did:**
+- Fixed and stabilized the audit engine after multiple real input tests
+- Integrated AI-generated executive summary using Gemini API with fallback logic
+- Added PDF export functionality for audit reports using jsPDF
+- Set up Supabase project for storing audit data (initial schema + connection configured)
+- Tested multiple end-to-end flows from input → audit → summary → output report
+
+**What I learned:**
+External API integration (Gemini) requires proper handling for key validation, quotas, and model availability. Also learned that fallback design is critical — the product must still work even if AI or external services fail.
+
+**Blockers / what I'm stuck on:**
+Need to refine Supabase schema design and decide what exactly should be stored for shareable audit URLs.
+
+**Plan for tomorrow:**
+- Connect Supabase to store audit results
+- Implement shareable audit URLs
+- Improve results page UX and structure
