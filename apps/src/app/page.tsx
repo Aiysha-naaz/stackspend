@@ -368,11 +368,115 @@ import ToolCard from '@/components/audit/ToolCard';
 import { TOOL_CONFIGS } from '@/config/tools';
 import { useAuditEngine } from '@/hooks/useAuditEngine';
 import { useAuditStore } from '@/hooks/useAuditStore';
+import jsPDF from 'jspdf';
 
 export default function HomePage() {
   const { teamSize, primaryUseCase, updateMeta } = useAuditStore();
   const audit = useAuditEngine();
   
+const [summary, setSummary] = useState('');
+const [summaryLoading, setSummaryLoading] = useState(false);
+
+
+const downloadPDF = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(20);
+  doc.text('StackSpend AI Audit Report', 20, 20);
+
+  doc.setFontSize(12);
+
+  doc.text(
+    `Current Monthly Spend: $${audit.currentTotalMonthly}`,
+    20,
+    40
+  );
+
+  doc.text(
+    `Optimized Monthly Spend: $${audit.optimizedTotalMonthly}`,
+    20,
+    50
+  );
+
+  doc.text(
+    `Monthly Savings: $${audit.totalMonthlySavings}`,
+    20,
+    60
+  );
+
+  doc.text(
+    `Annual Savings: $${audit.totalMonthlySavings * 12}`,
+    20,
+    70
+  );
+
+  doc.text('AI Audit Summary:', 20, 90);
+
+  const splitSummary = doc.splitTextToSize(summary, 170);
+
+  doc.text(splitSummary, 20, 100);
+
+  let y = 130;
+
+  doc.text('Optimization Insights:', 20, y);
+
+  y += 10;
+
+  audit.insights.forEach((insight) => {
+    const text = `• ${insight.message} | Save $${insight.potentialSavings}/month`;
+
+    const lines = doc.splitTextToSize(text, 170);
+
+    doc.text(lines, 20, y);
+
+    y += lines.length * 8;
+  });
+
+  doc.save('stackspend-audit-report.pdf');
+};
+
+useEffect(() => {
+  async function generateSummary() {
+    if (audit.insights.length === 0) {
+      setSummary(
+        'Your AI tooling stack appears well optimized with minimal unnecessary spend detected.'
+      );
+      return;
+    }
+
+    try {
+      setSummaryLoading(true);
+
+      const response = await fetch('/api/generate-summary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          audit,
+          primaryUseCase,
+          teamSize,
+        }),
+      });
+
+      const data = await response.json();
+
+      setSummary(
+        data.summary ||
+          'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
+      );
+    } catch (error) {
+      setSummary(
+        'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
+      );
+    } finally {
+      setSummaryLoading(false);
+    }
+  }
+
+  generateSummary();
+}, [audit, primaryUseCase, teamSize]);
+
   // Track our dark/light state directly
   const [isDark, setIsDark] = useState(false);
 
@@ -490,6 +594,14 @@ export default function HomePage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-50 tracking-tight">
             Audit Intelligence Report
           </h2>
+          <div className="pt-4">
+  <button
+    onClick={downloadPDF}
+    className="bg-black dark:bg-white dark:text-black text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition cursor-pointer"
+  >
+    Download PDF Report
+  </button>
+</div>
         </div>
 
         {/* Financial Metrics Dashboard */}
@@ -514,6 +626,24 @@ export default function HomePage() {
             <p className="text-2xl font-extrabold text-blue-700 dark:text-blue-400 mt-1">${audit.totalMonthlySavings * 12}<span className="text-xs text-blue-600 font-normal">/yr</span></p>
           </div>
         </div>
+
+      {/* AI Summary */}
+<div className="border border-gray-200 dark:border-zinc-800 rounded-xl p-5 bg-gray-50 dark:bg-zinc-800/50 space-y-2">
+  <div className="flex items-center gap-2">
+    <div className="h-2 w-2 rounded-full bg-blue-500" />
+    <h3 className="text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-zinc-400">
+      AI Audit Summary
+    </h3>
+  </div>
+
+  <p className="text-sm leading-relaxed text-gray-700 dark:text-zinc-300">
+    {summaryLoading
+      ? 'Generating personalized audit summary...'
+      : summary}
+  </p>
+</div>
+
+
 
         {/* High Savings Call To Action (Enterprise Hook - Balanced Light Card) */}
         {audit.totalMonthlySavings >= 500 && (

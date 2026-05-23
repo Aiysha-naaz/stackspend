@@ -34,3 +34,20 @@ Still working on fully connecting the UI with the audit engine output in a clean
 
 **Plan for tomorrow:**
 Build the results page UI, connect audit engine output to frontend dashboard, and start implementing shareable URL structure for audit results.
+
+
+## Day 3 — 2026-05-22
+
+**Hours worked:** 3–5
+
+**What I did:**
+Improved audit engine logic by refining redundancy detection between AI tools and fixing inconsistencies in seat waste and plan mismatch calculations. Cleaned up tool configuration and improved how insights are filtered to avoid duplicate or conflicting recommendations. Also tested multiple real-world scenarios in the UI to validate savings calculations and optimization outputs.
+
+**What I learned:**
+Small inconsistencies in rule ordering and filtering can completely change financial outputs in an audit system. The difference between showing correct vs misleading savings depends more on logic structure than raw calculations.
+
+**Blockers / what I'm stuck on:**
+Need to further refine plan mismatch detection and ensure all tools behave consistently across different team sizes and usage patterns.
+
+**Plan for tomorrow:**
+Improve detectPlanMismatch logic, reduce edge-case inconsistencies, and tighten overall audit accuracy for more realistic savings outputs.
