@@ -75,3 +75,82 @@ Need to refine Supabase schema design and decide what exactly should be stored f
 - Connect Supabase to store audit results
 - Implement shareable audit URLs
 - Improve results page UX and structure
+
+----
+
+
+
+## Day 5 — 2026-05-24
+
+**Hours worked:** 8
+
+**What I did:**
+
+Today I focused on completing the full end-to-end system: audit engine → UI → lead capture → email → shareable results.
+
+The product is now fully functional as a complete flow from input to viral sharing.
+
+---
+
+## Major Features Completed
+
+### 1. Lead Capture System Fixed
+- Fixed Supabase RLS issues blocking inserts
+- Lead data now correctly stored in `leads` table
+- Rate limiting + honeypot protection added
+- Transactional email flow integrated via Resend
+
+---
+
+### 2. Email System Stabilized
+- Fixed Resend sandbox restrictions
+- Confirmed transactional emails are sending
+- HTML email includes summary + key metrics
+
+---
+
+### 3. Shareable Public URLs
+- `/audit/[id]` public result pages working
+- Sensitive data stripped (email, company name removed)
+- Open Graph + Twitter Card metadata added
+- Link previews optimized for WhatsApp/Twitter sharing
+
+---
+
+### 4. UI Improvements
+- Added trust badges:
+  - No login required
+  - Instant audit
+  - Shareable report
+- Improved readability of homepage CTA section
+
+---
+
+### 5. Testing
+- Vitest suite for audit engine (5 tests)
+- Covers redundancy, seat waste, API optimization, and savings logic
+- All tests passing
+
+-----
+
+
+## What I learned:
+
+- Supabase RLS can silently block valid inserts
+- Email sandbox restrictions often cause “fake success” confusion
+- Shareable URLs + OG tags are critical for viral loop behavior
+
+
+**Blockers / what I'm stuck on:**
+- Email initially appeared successful but wasn’t reaching inbox due to Resend sandbox restrictions
+- Supabase RLS policies blocked inserts until explicitly configured
+- OG image preview debugging was unstable in development (localhost vs production mismatch issues)
+
+----
+
+
+## Plan for tomorrow:
+
+- Deploy production build
+- Verify OG previews on real domain
+- Final polish for submission
