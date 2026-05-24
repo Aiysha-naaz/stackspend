@@ -65,6 +65,7 @@ const result = runAuditEngine({
 
   updateMeta: () => {},
   updateTool: () => {},
+  resetAudit: () => {},
 });
 
 console.log(result);
