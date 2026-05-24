@@ -369,6 +369,11 @@ import { TOOL_CONFIGS } from '@/config/tools';
 import { useAuditEngine } from '@/hooks/useAuditEngine';
 import { useAuditStore } from '@/hooks/useAuditStore';
 import jsPDF from 'jspdf';
+import { useRouter } from "next/navigation";
+import { saveAudit } from '@/lib/saveAudit';
+import { useRef } from 'react';
+
+
 
 export default function HomePage() {
   const { teamSize, primaryUseCase, updateMeta } = useAuditStore();
@@ -378,62 +383,66 @@ const [summary, setSummary] = useState('');
 const [summaryLoading, setSummaryLoading] = useState(false);
 
 
-const downloadPDF = () => {
-  const doc = new jsPDF();
+const router = useRouter();
+const [auditId, setAuditId] = useState<string | null>(null);
+const savedRef = useRef(false);
 
-  doc.setFontSize(20);
-  doc.text('StackSpend AI Audit Report', 20, 20);
+// const downloadPDF = () => {
+//   const doc = new jsPDF();
 
-  doc.setFontSize(12);
+//   doc.setFontSize(20);
+//   doc.text('StackSpend AI Audit Report', 20, 20);
 
-  doc.text(
-    `Current Monthly Spend: $${audit.currentTotalMonthly}`,
-    20,
-    40
-  );
+//   doc.setFontSize(12);
 
-  doc.text(
-    `Optimized Monthly Spend: $${audit.optimizedTotalMonthly}`,
-    20,
-    50
-  );
+//   doc.text(
+//     `Current Monthly Spend: $${audit.currentTotalMonthly}`,
+//     20,
+//     40
+//   );
 
-  doc.text(
-    `Monthly Savings: $${audit.totalMonthlySavings}`,
-    20,
-    60
-  );
+//   doc.text(
+//     `Optimized Monthly Spend: $${audit.optimizedTotalMonthly}`,
+//     20,
+//     50
+//   );
 
-  doc.text(
-    `Annual Savings: $${audit.totalMonthlySavings * 12}`,
-    20,
-    70
-  );
+//   doc.text(
+//     `Monthly Savings: $${audit.totalMonthlySavings}`,
+//     20,
+//     60
+//   );
 
-  doc.text('AI Audit Summary:', 20, 90);
+//   doc.text(
+//     `Annual Savings: $${audit.totalMonthlySavings * 12}`,
+//     20,
+//     70
+//   );
 
-  const splitSummary = doc.splitTextToSize(summary, 170);
+//   doc.text('AI Audit Summary:', 20, 90);
 
-  doc.text(splitSummary, 20, 100);
+//   const splitSummary = doc.splitTextToSize(summary, 170);
 
-  let y = 130;
+//   doc.text(splitSummary, 20, 100);
 
-  doc.text('Optimization Insights:', 20, y);
+//   let y = 130;
 
-  y += 10;
+//   doc.text('Optimization Insights:', 20, y);
 
-  audit.insights.forEach((insight) => {
-    const text = `• ${insight.message} | Save $${insight.potentialSavings}/month`;
+//   y += 10;
 
-    const lines = doc.splitTextToSize(text, 170);
+//   audit.insights.forEach((insight) => {
+//     const text = `• ${insight.message} | Save $${insight.potentialSavings}/month`;
 
-    doc.text(lines, 20, y);
+//     const lines = doc.splitTextToSize(text, 170);
 
-    y += lines.length * 8;
-  });
+//     doc.text(lines, 20, y);
 
-  doc.save('stackspend-audit-report.pdf');
-};
+//     y += lines.length * 8;
+//   });
+
+//   doc.save('stackspend-audit-report.pdf');
+// };
 
 useEffect(() => {
   async function generateSummary() {
@@ -476,6 +485,24 @@ useEffect(() => {
 
   generateSummary();
 }, [audit, primaryUseCase, teamSize]);
+
+
+const handleGenerateReport = async () => {
+  try {
+    const saved = await saveAudit({
+      ...audit,
+      teamSize,
+      primaryUseCase,
+    });
+
+    if (saved?.id) {
+      setAuditId(saved.id);
+      router.push(`/audit/${saved.id}`);
+    }
+  } catch (err) {
+    console.error("Failed to generate report", err);
+  }
+};
 
   // Track our dark/light state directly
   const [isDark, setIsDark] = useState(false);
@@ -595,13 +622,21 @@ useEffect(() => {
             Audit Intelligence Report
           </h2>
           <div className="pt-4">
-  <button
+  {/* <button
     onClick={downloadPDF}
     className="bg-black dark:bg-white dark:text-black text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition cursor-pointer"
   >
     Download PDF Report
-  </button>
+  </button> */}
+
+  <button
+  onClick={handleGenerateReport}
+  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer"
+>
+  Generate Full Report
+</button>
 </div>
+
         </div>
 
         {/* Financial Metrics Dashboard */}
