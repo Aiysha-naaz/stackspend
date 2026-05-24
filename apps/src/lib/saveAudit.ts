@@ -31,8 +31,7 @@ console.log("🔥 saveAudit CALLED");
 
 export async function saveAudit(audit: any) {
   console.log("🔥 saveAudit CALLED");
-  console.log("📦 INPUT AUDIT:", audit);
-
+ 
   const payload = {
     team_size: audit.teamSize,
     primary_use_case: audit.primaryUseCase,
@@ -44,7 +43,7 @@ export async function saveAudit(audit: any) {
     summary: audit.summary || '',
   };
 
-  console.log("🚀 SUPABASE PAYLOAD:", payload);
+  
 
   const { data, error } = await supabase
     .from('audits')

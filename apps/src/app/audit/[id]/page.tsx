@@ -153,6 +153,7 @@ import { Lightbulb, ArrowUpRight } from 'lucide-react';
 import DownloadReportButton from '@/components/audit/DownloadReportButton';
 import { runAuditEngine } from '@/lib/audit-engine';
 import { useAuditStore } from '@/hooks/useAuditStore';
+import LeadCapture from "@/components/LeadCapture";
 
 async function getAudit(id: string) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -384,8 +385,12 @@ const audit = {
         );
       })}
 
+
+<LeadCapture auditId={id} teamSize={audit.team_size} />
  
     </div>
+
+
 
   </main>
 

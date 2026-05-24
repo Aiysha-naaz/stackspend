@@ -210,8 +210,8 @@ import { saveAudit } from '@/lib/saveAudit';
 
 export async function POST(req: Request) {
   try {
-    console.log('KEY:', process.env.GEMINI_API_KEY);
-    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+  
+    
 
     const body = await req.json();
     const { audit, primaryUseCase, teamSize } = body;
