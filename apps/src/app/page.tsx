@@ -524,14 +524,29 @@ const handleGenerateReport = async () => {
       <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-100 dark:border-zinc-800">
         <div className="space-y-3 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/50 rounded-full">
-            AI Spend Optimization
+            Reduce AI Spend Without Sacrificing Productivity
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-zinc-50 sm:text-5xl">
             StackSpend AI Audit
           </h1>
           <p className="text-lg text-gray-500 dark:text-zinc-400 max-w-2xl">
-            Identify and eliminate redundant AI subscriptions across your product, data, and engineering stacks.
+           Instantly audit your AI tooling stack and uncover redundant subscriptions, over-provisioned seats, and vendor overlap.
           </p>
+
+
+          <div className="flex flex-wrap gap-3 mt-5">
+  <span className="px-3 py-1.5 rounded-full border bg-white dark:bg-zinc-900 text-sm font-medium text-gray-700 dark:text-zinc-200 shadow-sm">
+    No login required
+  </span>
+
+  <span className="px-3 py-1.5 rounded-full border bg-white dark:bg-zinc-900 text-sm font-medium text-gray-700 dark:text-zinc-200 shadow-sm">
+    Instant audit
+  </span>
+
+  <span className="px-3 py-1.5 rounded-full border bg-white dark:bg-zinc-900 text-sm font-medium text-gray-700 dark:text-zinc-200 shadow-sm">
+    Shareable report
+  </span>
+</div>
         </div>
 
         {/* Premium Appearance Mode Toggle Button */}
@@ -661,6 +676,56 @@ const handleGenerateReport = async () => {
             <p className="text-2xl font-extrabold text-blue-700 dark:text-blue-400 mt-1">${audit.totalMonthlySavings * 12}<span className="text-xs text-blue-600 font-normal">/yr</span></p>
           </div>
         </div>
+
+
+        {audit.totalMonthlySavings > 500 && (
+  <div className="max-w-5xl mx-auto mb-8">
+    <div className="rounded-2xl border border-blue-200 bg-blue-50 dark:bg-blue-950/20 p-6 flex items-start justify-between gap-6">
+      <div>
+        <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+          High Savings Opportunity
+        </p>
+
+        <h2 className="text-2xl font-bold mt-2 text-gray-900 dark:text-white">
+          You could save over ${audit.totalMonthlySavings}/month
+        </h2>
+
+        <p className="text-gray-600 dark:text-zinc-300 mt-2 max-w-2xl">
+          Teams with this level of AI spend inefficiency often unlock
+          additional savings through vendor consolidation, credits,
+          and usage restructuring.
+        </p>
+      </div>
+
+      <a
+        href="https://credex.rocks"
+        target="_blank"
+        className="shrink-0 bg-black text-white px-5 py-3 rounded-xl font-semibold hover:opacity-90 transition"
+      >
+        Book Credex Consultation
+      </a>
+    </div>
+  </div>
+)}
+
+
+
+
+{audit.totalMonthlySavings < 100 && (
+  <div className="max-w-5xl mx-auto mb-8">
+    <div className="rounded-2xl border bg-green-50 dark:bg-green-950/20 border-green-200 p-6">
+      <h2 className="text-xl font-bold text-green-700 dark:text-green-300">
+        Your stack is already well optimized
+      </h2>
+
+      <p className="text-gray-600 dark:text-zinc-300 mt-2">
+        We did not detect major unnecessary AI spend based on your
+        current tooling and team size. We’ll continue monitoring
+        emerging pricing changes and optimization opportunities.
+      </p>
+    </div>
+  </div>
+)}
 
       {/* AI Summary */}
 <div className="border border-gray-200 dark:border-zinc-800 rounded-xl p-5 bg-gray-50 dark:bg-zinc-800/50 space-y-2">
