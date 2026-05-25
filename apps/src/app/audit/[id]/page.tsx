@@ -172,14 +172,25 @@ import ShareAuditButton from "@/components/audit/ShareAuditButton";
 
 
 
+// async function getAudit(id: string) {
+//   const res = await fetch(`/api/get-audit/${id}`, {
+//     cache: "no-store",
+//   });
+
+//   return res.json();
+// }
+
 async function getAudit(id: string) {
   const res = await fetch(`/api/get-audit/${id}`, {
     cache: "no-store",
   });
 
+  if (!res.ok) {
+    return null;
+  }
+
   return res.json();
 }
-
 
 
 
@@ -250,8 +261,16 @@ export default async function AuditPage({
     return <div>Invalid audit ID</div>;
   }
 
+  // const data = await getAudit(id);
+  // const raw = data.audit;
+
   const data = await getAudit(id);
-  const raw = data.audit;
+
+if (!data || !data.audit) {
+  return <div>Audit not found</div>;
+}
+
+const raw = data.audit;
 
 
 const audit = {
