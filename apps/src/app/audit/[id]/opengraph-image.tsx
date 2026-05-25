@@ -8,15 +8,43 @@ export const size = {
 
 export const contentType = "image/png";
 
-async function getAudit(id: string) {
-  const { data } = await supabase
-    .from("audits")
-    .select("*")
-    .eq("id", id)
-    .single();
+// async function getAudit(id: string) {
+//   const { data } = await supabase
+//     .from("audits")
+//     .select("*")
+//     .eq("id", id)
+//     .single();
 
-  return data;
+//   return data;
+// }
+
+
+async function getAudit(id: string) {
+  try {
+    const { data } = await supabase
+      .from("audits")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+if (!data) {
+  return new ImageResponse(
+    (
+      <div style={{ background: "#0f172a", color: "white" }}>
+        StackSpend Audit
+      </div>
+    ),
+    size
+  );
 }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+
 
 export default async function Image({
   params,
