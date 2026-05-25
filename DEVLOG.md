@@ -154,3 +154,24 @@ The product is now fully functional as a complete flow from input to viral shari
 - Deploy production build
 - Verify OG previews on real domain
 - Final polish for submission
+
+---
+
+
+## Day 6 — 2026-05-25
+
+**Hours worked:** 6
+
+**What I did:**
+Worked on the audit results page and improved the shareable audit URL flow. Implemented dynamic metadata generation for Open Graph previews, connected audit data fetching with metadata generation, and debugged social sharing behavior across platforms like WhatsApp and OpenGraph preview tools.
+
+Improved the audit report UI with clearer savings metrics, insight cards, and share/download actions. Also cleaned up API fetch behavior and ensured audit pages render correctly using dynamic routing.
+
+**What I learned:**
+Learned how Next.js App Router handles async dynamic route params inside `generateMetadata`, and how social platforms aggressively cache Open Graph previews. Also learned that Open Graph validators may succeed even when messaging apps still use stale cached previews.
+
+**Blockers / what I'm stuck on:**
+Still investigating inconsistent preview behavior when sharing links directly through some apps. The Open Graph image itself renders correctly, but platform-level caching causes inconsistent previews.
+
+**Plan for tomorrow:**
+Finish all required documentation files (README, ARCHITECTURE, GTM, ECONOMICS, PROMPTS), review MVP completeness against assignment requirements, and polish any remaining UI issues.
