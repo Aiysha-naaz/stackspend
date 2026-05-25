@@ -272,20 +272,28 @@ async function getAudit(id: string) {
 export async function generateMetadata({
   params,
 }: {
+  
   params: { id: string };
 }): Promise<Metadata> {
   const { id } = params;
 
+   console.log("🟡 generateMetadata called for:", id);
+
+
   const data = await getAudit(id);
+  console.log("🟢 Supabase response:", data);
+
   const audit = data?.audit;
 
   if (!audit) {
     return {
+    
       title: "Audit Report",
     };
   }
 
   const savings = audit.annual_savings || 0;
+    console.log("🟣 Savings calculated:", savings);
 
 //   return {
 //      metadataBase: new URL("https://stackspend-mauve.vercel.app"),
