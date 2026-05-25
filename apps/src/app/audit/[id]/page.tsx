@@ -182,8 +182,8 @@ import ShareAuditButton from "@/components/audit/ShareAuditButton";
 
 async function getAudit(id: string) {
   const res = await fetch(`/api/get-audit/${id}`, {
-    cache: "no-store",
-  });
+  cache: "no-store",
+});
 
   if (!res.ok) {
     return null;
