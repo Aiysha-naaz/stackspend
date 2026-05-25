@@ -159,16 +159,29 @@ import ShareAuditButton from "@/components/audit/ShareAuditButton";
 
 
 
-async function getAudit(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+// async function getAudit(id: string) {
+//   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const res = await fetch(
-    `${baseUrl}/api/get-audit/${id}`,
-    { cache: "no-store" }
-  );
+//   const res = await fetch(
+//     `${baseUrl}/api/get-audit/${id}`,
+//     { cache: "no-store" }
+//   );
+
+//   return res.json();
+// }
+
+
+
+async function getAudit(id: string) {
+  const res = await fetch(`/api/get-audit/${id}`, {
+    cache: "no-store",
+  });
 
   return res.json();
 }
+
+
+
 
 // export default async function AuditPage({
 //   params,
