@@ -273,9 +273,11 @@ export async function generateMetadata({
   params,
 }: {
   
-  params: { id: string };
+  // params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const { id } = params;
+  // const { id } = params;
+  const { id } = await params;
 
    console.log("🟡 generateMetadata called for:", id);
 
