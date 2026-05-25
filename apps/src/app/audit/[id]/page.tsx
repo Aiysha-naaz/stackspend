@@ -148,6 +148,8 @@
 // }
 
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 import { Lightbulb, ArrowUpRight } from 'lucide-react';
 import DownloadReportButton from '@/components/audit/DownloadReportButton';
@@ -331,7 +333,8 @@ return {
 
     images: [
       {
-        url: `https://stackspend-mauve.vercel.app/audit/${id}/opengraph-image`,
+        url: `https://stackspend-mauve.vercel.app/audit/${id}/opengraph-image?v=1`,
+        
         width: 1200,
         height: 630,
       },
