@@ -151,11 +151,12 @@
 
 import { Lightbulb, ArrowUpRight } from 'lucide-react';
 import DownloadReportButton from '@/components/audit/DownloadReportButton';
-import { runAuditEngine } from '@/lib/audit-engine';
-import { useAuditStore } from '@/hooks/useAuditStore';
+// import { runAuditEngine } from '@/lib/audit-engine';
+// import { useAuditStore } from '@/hooks/useAuditStore';
 import LeadCapture from "@/components/LeadCapture";
 import type { Metadata } from "next";
 import ShareAuditButton from "@/components/audit/ShareAuditButton";
+import type { OptimizationInsight } from '@/types/audit';
 
 
 
@@ -365,12 +366,17 @@ async function getAudit(id: string) {
 
 
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const { id } = params;
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> {
+//   const { id } = params;
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
 
   return {
     metadataBase: new URL("https://stackspend-mauve.vercel.app"),
@@ -563,7 +569,7 @@ const audit = {
         Optimization Insights
       </h2>
 
-      {audit.insights.map((insight: any) => {
+      {audit.insights.map((insight: OptimizationInsight) => {
         const isCritical = insight.severity === "critical";
 
         return (

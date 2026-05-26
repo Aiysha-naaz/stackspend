@@ -41,12 +41,28 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+
+type AuditInsight = {
+  message: string;
+  potentialSavings: number;
+};
+
+type AuditReport = {
+  summary: string;
+  current_spend: number;
+  optimized_spend: number;
+  annual_savings: number;
+  insights: AuditInsight[];
+};
+
+
 export async function sendAuditEmail({
   email,
   audit,
 }: {
   email: string;
-  audit: any;
+  // audit: any;
+    audit: AuditReport;
 }) {
   try {
     const response = await resend.emails.send({

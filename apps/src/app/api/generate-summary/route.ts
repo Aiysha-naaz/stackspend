@@ -207,6 +207,7 @@
 
 import { NextResponse } from 'next/server';
 import { saveAudit } from '@/lib/saveAudit';
+import type { OptimizationInsight } from '@/types/audit';
 
 export async function POST(req: Request) {
   try {
@@ -230,7 +231,7 @@ Potential Monthly Savings: $${audit.totalMonthlySavings}
 Insights:
 ${audit.insights
   .map(
-    (i: any) =>
+    (i: OptimizationInsight) =>
       `- ${i.message} Potential Savings: $${i.potentialSavings}/month`
   )
   .join('\n')}
@@ -267,7 +268,7 @@ Requirements:
       } else {
         throw new Error('Gemini failed');
       }
-    } catch (err) {
+    } catch (_err) {
       console.log("⚠️ Gemini failed, using fallback summary");
 
       const savingsRate =

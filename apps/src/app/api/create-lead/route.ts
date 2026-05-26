@@ -163,6 +163,8 @@ export async function POST(req: Request) {
     optimized_spend: auditData.optimized_spend,
     annual_savings: auditData.annual_savings,
     summary: auditData.summary,
+     insights: auditData.insights || [],
+
   },
 });
 console.log("EMAIL RESULT:", emailResult);
@@ -172,13 +174,15 @@ console.log("EMAIL RESULT:", emailResult);
     console.log("EMAIL SENT");
 
     return NextResponse.json({ success: true, lead: data });
-  }catch (err: any) {
+  }catch (err: unknown) {
   console.error("❌ CREATE LEAD FAILED:", err);
+  
 
   return NextResponse.json(
     {
       error: "Failed to create lead",
-      details: err?.message || err,
+      details: err instanceof Error ? err.message : "Unknown error",
+    
     },
     { status: 500 }
   );

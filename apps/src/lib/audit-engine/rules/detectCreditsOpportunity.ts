@@ -175,7 +175,7 @@ export function detectCreditsOpportunity(
         ? 'API spend is highly concentrated in one provider, increasing eligibility for committed-use discounts or credits.'
         : 'Multi-provider API spend may qualify for consolidated credits or volume-based discounts.',
     potentialSavings: Math.round(savings),
-    // @ts-ignore if not in type yet
+   // @ts-expect-error confidence not yet added to type
     confidence,
   });
 

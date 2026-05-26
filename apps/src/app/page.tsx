@@ -368,7 +368,7 @@ import ToolCard from '@/components/audit/ToolCard';
 import { TOOL_CONFIGS } from '@/config/tools';
 import { useAuditEngine } from '@/hooks/useAuditEngine';
 import { useAuditStore } from '@/hooks/useAuditStore';
-import jsPDF from 'jspdf';
+// import jsPDF from 'jspdf';
 import { useRouter } from "next/navigation";
 import { saveAudit } from '@/lib/saveAudit';
 import { useRef } from 'react';
@@ -443,9 +443,67 @@ const savedRef = useRef(false);
 
 //   doc.save('stackspend-audit-report.pdf');
 // };
+const hasRun = useRef(false);
+
+// useEffect(() => {
+//   async function generateSummary() {
+//     if (audit.insights.length === 0) {
+//       setSummary(
+//         'Your AI tooling stack appears well optimized with minimal unnecessary spend detected.'
+//       );
+//       return;
+//     }
+
+//     try {
+//       setSummaryLoading(true);
+
+//       const response = await fetch('/api/generate-summary', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           audit,
+//           primaryUseCase,
+//           teamSize,
+//         }),
+//       });
+
+//       const data = await response.json();
+
+//       setSummary(
+//         data.summary ||
+//           'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
+//       );
+//     } catch (error) {
+//       setSummary(
+//         'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
+//       );
+//     } finally {
+//       setSummaryLoading(false);
+//     }
+//   }
+
+//    if (hasRun.current) return;
+//   hasRun.current = true;
+
+//   generateSummary();
+// // }, [audit, primaryUseCase, teamSize]);
+// },[audit.insights.length, primaryUseCase, teamSize]);
+
+
+
+
+
+
 
 useEffect(() => {
+  let cancelled = false;
+
   async function generateSummary() {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     if (audit.insights.length === 0) {
       setSummary(
         'Your AI tooling stack appears well optimized with minimal unnecessary spend detected.'
@@ -458,9 +516,7 @@ useEffect(() => {
 
       const response = await fetch('/api/generate-summary', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           audit,
           primaryUseCase,
@@ -470,24 +526,37 @@ useEffect(() => {
 
       const data = await response.json();
 
+      if (cancelled) return;
+
       setSummary(
         data.summary ||
           'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
       );
     } catch (error) {
+      if (cancelled) return;
+
       setSummary(
         'Your team may be able to reduce AI tooling costs through consolidation and pricing optimization.'
       );
     } finally {
-      setSummaryLoading(false);
+      if (!cancelled) setSummaryLoading(false);
     }
   }
 
   generateSummary();
-}, [audit, primaryUseCase, teamSize]);
+
+  return () => {
+    cancelled = true;
+  };
+}, [audit.insights.length, primaryUseCase, teamSize]);
+
+
 
 
 const handleGenerateReport = async () => {
+   if (savedRef.current) return;   // 👈 ADD THIS HERE
+  savedRef.current = true;  
+  console.log("HANDLE GENERATE REPORT CALLED");
   try {
     const saved = await saveAudit({
       ...audit,
@@ -504,21 +573,50 @@ const handleGenerateReport = async () => {
   }
 };
 
-  // Track our dark/light state directly
   const [isDark, setIsDark] = useState(false);
 
-  // Synchronize state changes immediately with the DOM root for Tailwind v4
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDark) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [isDark]);
+// Load saved theme on first render
+// useEffect(() => {
+//   const savedTheme = localStorage.getItem('theme');
+
+//   if (savedTheme === 'dark') {
+//     setIsDark(true);
+//     document.documentElement.classList.add('dark');
+//   } else {
+//     setIsDark(false);
+//     document.documentElement.classList.remove('dark');
+//   }
+// }, []);
+
+
+useEffect(() => {
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+}, [isDark]);
+
+// Toggle handler
+const toggleDarkMode = () => {
+  const newMode = !isDark;
+  setIsDark(newMode);
+
+  if (newMode) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+};
 
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-12 antialiased transition-colors duration-200">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-12 antialiased transition-colors duration-200">
+    
+    
       
       {/* Dynamic Header & Theme Switcher Action Area */}
       <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-100 dark:border-zinc-800">
@@ -552,7 +650,7 @@ const handleGenerateReport = async () => {
         {/* Premium Appearance Mode Toggle Button */}
         <div className="flex justify-center shrink-0">
           <button
-            onClick={() => setIsDark(!isDark)}
+           onClick={toggleDarkMode}
             type="button"
             className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border rounded-xl shadow-xs transition-all cursor-pointer bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
@@ -746,7 +844,7 @@ const handleGenerateReport = async () => {
 
 
         {/* High Savings Call To Action (Enterprise Hook - Balanced Light Card) */}
-        {audit.totalMonthlySavings >= 500 && (
+        {/* {audit.totalMonthlySavings >= 500 && (
           <div className="relative overflow-hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-100 dark:border-blue-900/60 rounded-xl p-6 shadow-xs transition-colors duration-200">
             <div className="relative z-10 max-w-xl space-y-3">
               <h3 className="text-lg font-bold tracking-tight text-blue-900 dark:text-blue-300">
@@ -762,7 +860,10 @@ const handleGenerateReport = async () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
+
+
+        
 
         {/* Healthy Stack State */}
         {audit.insights.length === 0 && (

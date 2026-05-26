@@ -1,4 +1,4 @@
-/* @import "tailwindcss";
+/* /* @import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -26,12 +26,50 @@ body {
 } */
 
 
-@import "tailwindcss";
+/* @import "tailwindcss"; */
 
 /* 1. Tell Tailwind v4 to look for the manual `.dark` class */
-@custom-variant dark (&:where(.dark, .dark *));
+/* @custom-variant dark (&:where(.dark, .dark *)); */
 
 /* 2. Setup your base values */
+/* :root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-geist-sans: Arial, Helvetica, sans-serif;
+  --font-geist-mono: monospace;
+} */
+
+
+/* 3. Bind them to Tailwind's utility generation engine */
+/* @theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+} */
+
+/* 4. Switch the variables inside Tailwind's theme layer when .dark is active */
+/* @layer theme {
+  .dark {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+/* 5. Apply the variables to your body securely */
+/* body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans);
+} */ 
+
+
+
+@import "tailwindcss";
+
+/* Tailwind v4 dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -39,23 +77,12 @@ body {
   --font-geist-mono: monospace;
 }
 
-/* 3. Bind them to Tailwind's utility generation engine */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* IMPORTANT: scope dark mode to html.dark */
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
-/* 4. Switch the variables inside Tailwind's theme layer when .dark is active */
-@layer theme {
-  .dark {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* 5. Apply the variables to your body securely */
 body {
   background-color: var(--background);
   color: var(--foreground);

@@ -85,13 +85,41 @@
 
 
 
+// "use client";
+
+// import { useEffect, useState } from "react";
+
+// export default function LeadCapture({ auditId, teamSize }: any) {
+//   const [mounted, setMounted] = useState(false);
+
+//   const [email, setEmail] = useState("");
+//   const [companyName, setCompanyName] = useState("");
+//   const [role, setRole] = useState("");
+//   const [website, setWebsite] = useState("");
+
+//   const [loading, setLoading] = useState(false);
+//   const [done, setDone] = useState(false);
+
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
+
+//   if (!mounted) return null;
+
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function LeadCapture({ auditId, teamSize }: any) {
-  const [mounted, setMounted] = useState(false);
+type LeadCaptureProps = {
+  auditId: string;
+  teamSize: number;
+};
 
+export default function LeadCapture({
+  auditId,
+  teamSize,
+}: LeadCaptureProps) {
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [role, setRole] = useState("");
@@ -99,12 +127,6 @@ export default function LeadCapture({ auditId, teamSize }: any) {
 
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
 
   const submitLead = async () => {
     if (!email) return;

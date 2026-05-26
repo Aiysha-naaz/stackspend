@@ -29,7 +29,21 @@ console.log("🔥 saveAudit CALLED");
 
 
 
-export async function saveAudit(audit: any) {
+
+type SaveAuditPayload = {
+  teamSize: number;
+  primaryUseCase: string;
+  currentTotalMonthly: number;
+  optimizedTotalMonthly: number;
+  totalMonthlySavings: number;
+  insights: unknown[];
+  summary?: string;
+};
+
+export async function saveAudit(audit: SaveAuditPayload) {
+
+
+// export async function saveAudit(audit: any) {
   console.log("🔥 saveAudit CALLED");
  
   const payload = {

@@ -2,7 +2,25 @@
 
 import jsPDF from 'jspdf';
 
-export default function DownloadReportButton({ audit }: any) {
+type AuditInsight = {
+  message: string;
+  potentialSavings: number;
+};
+
+type AuditReport = {
+  summary: string;
+  current_spend: number;
+  optimized_spend: number;
+  annual_savings: number;
+  insights: AuditInsight[];
+};
+
+// export default function DownloadReportButton({ audit }: any) {
+export default function DownloadReportButton({
+  audit,
+}: {
+  audit: AuditReport;
+}) {
   const downloadPDF = () => {
     const doc = new jsPDF();
 
@@ -30,12 +48,23 @@ doc.text(splitSummary, 20, 90);
     doc.text('Insights:', 20, y);
     y += 10;
 
+
+    
     // audit.insights.forEach((insight: any) => {
     //   const text = `• ${insight.message} | $${insight.potentialSavings}/mo`;
     //   doc.text(text, 20, y);
     //   y += 10;
     // });
-    audit.insights.forEach((insight: any) => {
+
+
+
+
+
+
+
+
+    // audit.insights.forEach((insight: any) => {
+    audit.insights.forEach((insight: AuditInsight) => {
   const messageLines = doc.splitTextToSize(
     `• ${insight.message}`,
     170
